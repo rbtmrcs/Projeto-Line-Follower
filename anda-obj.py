@@ -81,29 +81,27 @@ class Baterpub:
         except ZeroDivisionError:
             cx, cy = height/2, width/2
         cv2.circle(frame1,(int(cx), int(cy)), 10,(0,0,255),-1)
-        cv2.imshow('objeto',frame2)
-        cv2.imshow('linha',frame1)
         if x+y+w+h!=0:
             if 128 < cx and 192 > cx:
                 print('em frente')
                 walk='frente'
                 bater.publ1(walk)
             elif 64 < cx and 128 > cx:
-                print('vire a direita')
-                walk='direita'
-                bater.publ1(walk)
-            elif 192 < cx and 256 > cx:
                 print('vire a esquerda')
                 walk='esquerda'
                 bater.publ1(walk)
-            elif  64 > cx:
-                print('vira muito d')
-                walk='muito direita'
+            elif 192 < cx and 256 > cx:
+                print('vire a direita')
+                walk='direita'
                 bater.publ1(walk)
-            elif  256 < cx:
+            elif  64 > cx:
+                print('vira muito e')
                 walk='muito esquerda'
                 bater.publ1(walk)
-                print('vira muito e')
+            elif  256 < cx:
+                walk='muito direita'
+                bater.publ1(walk)
+                print('vira muito d')
         else:
             walk='nao achei'
             bater.publ1(walk)

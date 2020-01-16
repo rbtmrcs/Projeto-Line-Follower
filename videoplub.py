@@ -27,8 +27,8 @@ def image_publisher():
         print "  It can be a video file,             e.g.: robotvideo.mkv"
         exit(0)
     '''
-    resource = sys.argv[1]
     print(sys.argv)
+    resource = '2'
     # If we are given just a number, interpret it as a video device
     if len(resource) < 3:
         resource_name = "/dev/video" + resource
