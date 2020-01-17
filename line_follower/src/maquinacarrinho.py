@@ -28,11 +28,10 @@ class Sinal(smach.State):
 class Andarobj(smach.State):
     def __init__(self):
         smach.State.__init__(self, outcomes=['foi','repete'])
-        self.sub = rospy.Subscriber('/bater', String, self.callback)
-        self.sub1 = rospy.Subscriber('/andar1', String, self.callback1)
         self.achou = False
         self.controle = Car_control()
         self.informacao = None
+        self.jafoi = False
 
     def callback(self,data):
         if data == String('bate la'):
@@ -42,6 +41,10 @@ class Andarobj(smach.State):
         self.informacao = data
 
     def execute(self, ud):
+        if not self.jafoi:
+            self.sub = rospy.Subscriber('/bater', String, self.callback)
+            self.sub1 = rospy.Subscriber('/andar1', String, self.callback1)
+            self.jafoi()
         rospy.sleep(2)
         if self.achou:
             return 'foi'
