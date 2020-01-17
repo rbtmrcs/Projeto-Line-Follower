@@ -1,5 +1,9 @@
 import cv2
 import numpy as np
+import rospy
+from std_msgs.msg import String
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge,CvBridgeError
 
 '''
 upper_green = np.array([75, 255, 255])
@@ -13,13 +17,25 @@ upper_red2 = np.array([256, 255, 255])
 lower_yellow = np.array([16, 76, 72])
 upper_yellow = np.array([30, 255, 210])
 '''
-cap = cv2.VideoCapture(0)
-LimiarBinarizacao = 125
-kernel = np.ones((2,2), np.uint8)
+class Baterpub:
+    def __init__(self):
+      self.pub1 = rospy.Publisher('/bater', String)
+      self.pub2 = rospy.Publisher('/andar1', String)
+      self.bridge = CvBridge()
+      self.sub = rospy.Subscriber("/camera_image",Image, self.callback)
 
-while (True):
-    __,frame = cap.read()
-    if 1 == True:
+    def publ1(self,walk):
+        self.pub2.publish(walk)
+    
+    def publ2(self):
+        self.pub1.publish('bate la')
+    
+    def callback(self,data):
+
+        LimiarBinarizacao = 125
+        kernel = np.ones((2,2), np.uint8)
+        frame = self.bridge.imgmsg_to_cv2(data,"bgr8")
+
         x = 0
         y = 0
         w = 0
@@ -30,23 +46,17 @@ while (True):
         lower_laranja = np.array([45, 100, 50])
         upperupper_laranja = np.array([30, 255, 210])
         '''
-        
         height = np.size(frame,0)
         width= np.size(frame,1)
-        frame2 = frame[height/1.5:height, 0:width]
+        frame2 = frame[height/2:height, 0:width]
         frame_hsv=cv2.cvtColor(frame2, cv2.COLOR_BGR2HSV)        
-        
         frame_mask = cv2.inRange(frame_hsv, lower_laranja, upperupper_laranja)
         frame_tratado3 = cv2.dilate(frame_mask, None, iterations=5)
         frame_tratado1 = cv2.erode(frame_tratado3, kernel, iterations = 1)
-        #frame_tratado2 = cv2.morphologyEx(frame_tratado1, cv2.MORPH_CLOSE, kernel)
         FrameBinarizado1 = cv2.threshold(frame_tratado1,LimiarBinarizacao,255,cv2.THRESH_BINARY)[1]
         FrameBinarizado2 = cv2.dilate(FrameBinarizado1,None,iterations=1)
-        #FrameBinarizado3 = cv2.bitwise_not(FrameBinarizado2)
         __,cnts, __ = cv2.findContours(FrameBinarizado2, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         cv2.drawContours(FrameBinarizado2,cnts,-1,(0,255,0),3)
-        
-        
         for c in cnts:
             area = cv2.contourArea(c)
             if area > 3500:
@@ -57,16 +67,32 @@ while (True):
             cx, cy = m['m10']/m['m00'], m['m01']/m['m00']
         except ZeroDivisionError:
             cx, cy = height/2, width/2
-        
         cv2.circle(frame2,(int(cx), int(cy)), 10,(0,0,255),-1)
-
-        cv2.imshow('Paulo1',frame2)
-        
-        if  x+w+y+h==480:
+        if  w+h==880:
             print('proximo estado')
-        
-        
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-cap.release()
-cv2.destroyAllWindows()
+        elif x+y+w+h!=0:
+            if 256 < cx and 384 > cx:
+                print('em frente')
+                walk='frente'
+                obj.publ1(walk)
+            elif 128 < cx and 256 > cx:
+                print('vire a esquerda')
+                walk='esquerda'
+                obj.publ1(walk)
+            elif 384 < cx and 512 > cx:
+                print('vire a direita')
+                walk='direita'
+                obj.publ1(walk)
+            elif  128 > cx:
+                print('vira muito e')
+                walk='muito esquerda'
+                obj.publ1(walk)
+            elif  512 < cx:
+                walk='muito direita'
+                obj.publ1(walk)
+                print('vira muito d')
+if __name__=='__main__':  
+   rospy.init_node('andando_1', anonymous=True)
+   obj= Baterpub()
+   rospy.spin()
+
