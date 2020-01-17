@@ -9,42 +9,47 @@ window.configure(background="gray")
 window.geometry("750x300")
 window.title("CAR CTRL - PYTHON GUI")
 '''
-#board = serial.Serial('/dev/ttyUSB1', 9600)
+board = serial.Serial('/dev/ttyUSB1', 9600)
 #board = serial.Serial('/dev/ttyACM0', 115200)
-
+'''
 class Board:
     def write(self):
         print ('qualquer coisa')
-        
+'''
+
 class Car_control:
 
     def __init__(self):
-        self.board =  Board()##serial.Serial('/dev/ttyUSB1', 9600)
+        self.board = serial.Serial('/dev/ttyUSB1', 9600)
         print("########### CAR CTRL PROGRAM ###########\n")
 
     def pra_frente(self):
         print("########### FRENTE ###########\n")
-        self.board.write(bytearray('1'))
+        self.board(bytearray('1'))
 
     def esquerda_light(self):
         print("########### ESQUERDA LIGHT ###########\n")
-        self.board.write(bytearray('2'))
+        self.board(bytearray('2'))
 
     def esquerda_hard(self):
         print("########### ESQUERDA HARD ###########\n")
-        self.board.write(bytearray('3'))
+        self.board(bytearray('3'))
 
     def direita_light(self):
         print("########### DIREITA LIGHT ###########\n")
-        self.board.write(bytearray('4'))
+        self.board(bytearray('4'))
 
     def direita_hard(self):
         print("########### DIREITA HARD ###########\n")
-        self.board.write(bytearray('5'))
+        self.board(bytearray('5'))
 
     def parar(self):
         print("########### PARAR ###########\n")
-        self.board.write(bytearray('7'))
+        self.board(bytearray('6'))
+
+    def retroceder(self):
+        print("########### RETROCEDER ###########\n")
+        self.board(bytearray('7'))
     
 '''
     b1 = tk.Button(window, text="FRENTE", command=pra_frente, bg='gray80', fg='gray7', font=("Times", 15))
