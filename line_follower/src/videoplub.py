@@ -37,7 +37,7 @@ def image_publisher():
     else:
         resource_name = resource
         vidfile = True
-    print "Trying to open resource: " + resource_name
+    print "Trying to open resource: " + resource_name 
     cap = cv2.VideoCapture(resource)
     if not cap.isOpened():
         print "Error opening resource: " + str(resource)
@@ -48,8 +48,8 @@ def image_publisher():
     print "Correctly opened resource, starting to show feed."
     while True:
         _ , frame = cap.read()
+        frame = cv2.flip(frame,-1)
         cv2.imshow("Stream: " + resource_name, frame)
-
         # ROS image stuff
         if vidfile and frame is not None:
             frame = np.uint8(frame)
