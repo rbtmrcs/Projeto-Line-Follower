@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import smach
 import rospy
 from std_msgs.msg import String

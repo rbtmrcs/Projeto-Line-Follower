@@ -1,10 +1,14 @@
 <?xml version="1.0"?>
 
 <launch>
+    <node name="video" pkg="line_follower" type="videoplub.py" />
     <node name="sinal" pkg="line_follower" type="sinal.py" />
     <node name="smach" pkg="line_follower" type="maquinacarrinho.py" />
     <node name="andaobj" pkg="line_follower" type="anda-obj.py" />
-    <node name="andaFInal" pkg="line_follower" type="anda-obj.py" />
+    <node name="andaFInal" pkg="line_follower" type="andaFinal.py" />
+    <node name="serial_car" pkg="line_follower" type="serial_car.py" />
+    <node name="maquinacarrinho" pkg="line_follower" type="maquinacarrinho.py" />
+
 
 
 </launch>
