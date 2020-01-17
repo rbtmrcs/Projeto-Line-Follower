@@ -44,7 +44,7 @@ class Andarobj(smach.State):
         if not self.jafoi:
             self.sub = rospy.Subscriber('/bater', String, self.callback)
             self.sub1 = rospy.Subscriber('/andar1', String, self.callback1)
-            self.jafoi()
+            self.jafoi = True
         rospy.sleep(2)
         if self.achou:
             return 'foi'
