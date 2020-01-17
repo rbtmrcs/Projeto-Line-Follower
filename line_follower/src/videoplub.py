@@ -28,7 +28,7 @@ def image_publisher():
         exit(0)
     '''
     print(sys.argv)
-    resource = '1'
+    resource = '0'
     # If we are given just a number, interpret it as a video device
     if len(resource) < 3:
         resource_name = "/dev/video" + resource
