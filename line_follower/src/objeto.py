@@ -19,8 +19,8 @@ upper_yellow = np.array([30, 255, 210])
 '''
 class Baterpub:
     def __init__(self):
-      self.pub1 = rospy.Publisher('/bater', String)
-      self.pub2 = rospy.Publisher('/andar1', String)
+      self.pub1 = rospy.Publisher('/colidir', String)
+      self.pub2 = rospy.Publisher('/andar3', String)
       self.bridge = CvBridge()
       self.sub = rospy.Subscriber("/camera_image",Image, self.callback)
 
@@ -28,7 +28,7 @@ class Baterpub:
         self.pub2.publish(walk)
     
     def publ2(self):
-        self.pub1.publish('bate la')
+        self.pub1.publish('chegou')
     
     def callback(self,data):
 
@@ -69,6 +69,7 @@ class Baterpub:
             cx, cy = height/2, width/2
         cv2.circle(frame2,(int(cx), int(cy)), 10,(0,0,255),-1)
         if  w+h==880:
+            obj.publ2()
             print('proximo estado')
         elif x+y+w+h!=0:
             if 256 < cx and 384 > cx:
@@ -92,7 +93,7 @@ class Baterpub:
                 obj.publ1(walk)
                 print('vira muito d')
 if __name__=='__main__':  
-   rospy.init_node('andando_1', anonymous=True)
-   obj= Baterpub()
-   rospy.spin()
+    rospy.init_node('andando_1', anonymous=True)
+    obj= Baterpub()
+    rospy.spin()
 
