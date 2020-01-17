@@ -27,6 +27,9 @@ class Sinalpub:
 
         self.bridge = CvBridge()
         self.pub = rospy.Publisher('/sinalverde', String)  
+    
+    def publ(self):
+        self.pub.publish('vai')
 
     def callback(self,data):
         LimiarBinarizacao = 125
@@ -73,6 +76,7 @@ class Sinalpub:
         vai = x+y+h+w
         if vai:
             print('vai')
+            sP.publ()
         else:
             print('Fica parado')
         

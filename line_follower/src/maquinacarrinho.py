@@ -35,7 +35,6 @@ class Andarobj(smach.State):
         self.informacao = None
 
     def callback(self,data):
-        print (data)
         if data == String('bate la'):
             self.achou = True
 
@@ -79,6 +78,7 @@ class Indoobj(smach.State):
         self.sub = rospy.Subscriber('/colidir', String, self.callback)
         self.sub = rospy.Subscriber('/andar3', String, self.callback1)
         self.chegou = False
+        self.controle = Car_control()
         self.informacao = None
 
     def callback(self,data):
@@ -141,14 +141,13 @@ class Reprocurar(smach.State):
 class  Andarfinal(smach.State):
     def __init__(self):
         smach.State.__init__(self, outcomes=['foi','repete'])
-        self.sub = rospy.Subscriber('/parar', String, self.callback)
-        self.sub1 = rospy.Subscriber('/andar2', String, self.callback1)
+        
         self.parou = False
         self.controle = Car_control()
         self.informacao = None
+        self.jafoi = False
 
     def callback(self,data):
-        print (data)
         if data == String('para'):
             self.parou = True
     
@@ -156,6 +155,11 @@ class  Andarfinal(smach.State):
         self.informacao = data
 
     def execute(self, ud):
+        if not self.jafoi:
+            self.sub = rospy.Subscriber('/parar', String, self.callback)
+            self.sub1 = rospy.Subscriber('/andar2', String, self.callback1)
+            self.jafoi = True
+
         rospy.sleep(2)
         if self.parou:
             self.controle.pra_frente()

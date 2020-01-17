@@ -53,6 +53,7 @@ class Baterpub:
         FrameBinarizado2 = cv2.dilate(FrameBinarizado1,None,iterations=1)
         __,cnts2, __ = cv2.findContours(FrameBinarizado2, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         cv2.drawContours(FrameBinarizado2,cnts2,-1,(0,255,0),3)
+        print type(cnts2)
         for c in cnts2:
             area = cv2.contourArea(c)
             if area > 3500:
